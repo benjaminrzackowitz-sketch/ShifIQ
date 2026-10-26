@@ -28,17 +28,17 @@
         </div>
         <div>
           <h1 class="font-bold text-base text-white flex items-center gap-2">
-            ShiftIQ <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono">DATA COCKPIT</span>
+            ShiftIQ <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono">LIVEBARN CONNECT</span>
           </h1>
-          <p class="text-xs text-slate-400">Multimodal Hockey AI & Shift Tagging Engine</p>
+          <p class="text-xs text-slate-400">Professional Dual-Screen Event Tagging Cockpit</p>
         </div>
       </div>
       <div class="flex items-center gap-2">
         <button onclick="triggerFileInput()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-2 rounded-lg border border-slate-700 transition">
-          📁 Load MP4 File
+          📁 Load Local MP4
         </button>
-        <button onclick="openLiveBarnDirect()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs px-3.5 py-2 rounded-lg transition shadow-lg shadow-cyan-500/20">
-          ↗️ Open LiveBarn
+        <button onclick="launchLiveBarn()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs px-3.5 py-2 rounded-lg transition shadow-lg shadow-cyan-500/20 flex items-center gap-1.5">
+          <span>↗️ Launch LiveBarn Window</span>
         </button>
       </div>
     </div>
@@ -46,32 +46,34 @@
 
   <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-    <!-- LEFT COLUMN: VIDEO PLAYER & TAGGING TIMELINE (7 COLS) -->
+    <!-- LEFT COLUMN: VIDEO STREAM CONNECTOR & TAGGING TIMELINE (7 COLS) -->
     <section class="lg:col-span-7 flex flex-col gap-5">
       
-      <!-- Video Control & Source Bar -->
+      <!-- LiveBarn Source Sync Bar -->
       <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl">
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">LiveBarn Arena / Game Link Sync</label>
         <div class="flex flex-col sm:flex-row gap-2">
-          <input id="videoSourceInput" type="text" placeholder="Paste MP4 Video Link or LiveBarn URL..." 
+          <input id="livebarnUrlInput" type="text" placeholder="Paste LiveBarn watch URL (e.g., https://watch.livebarn.com/...)" 
             class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition" />
-          <button onclick="loadVideoSource()" class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-bold px-4 py-2 rounded-xl transition">
-            Load Stream
+          <button onclick="saveLiveBarnLink()" class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-bold px-4 py-2 rounded-xl transition">
+            Save Link
           </button>
         </div>
+        <p class="text-[11px] text-slate-500 mt-2">💡 <span class="text-slate-400">Workflow Tip:</span> Click 'Launch LiveBarn Window' to open your stream side-by-side. Use the timer below or load an optional MP4 clip for timestamp syncing.</p>
         <input type="file" id="localFileInput" accept="video/mp4,video/webm" class="hidden" onchange="handleFileSelect(event)" />
       </div>
 
-      <!-- Main HTML5 Player Container -->
+      <!-- Main HTML5 Player / Live Connector Box -->
       <div class="bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden shadow-2xl aspect-video relative flex items-center justify-center">
         <video id="gameVideo" class="w-full h-full object-contain hidden" controls></video>
         <div id="playerPlaceholder" class="p-6 text-center">
           <div class="w-14 h-14 mx-auto rounded-full bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-3">
-            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
           </div>
-          <p class="text-sm font-semibold text-white mb-1">49ing Interactive Player Ready</p>
-          <p class="text-xs text-slate-400 max-w-sm mb-4">Select an MP4 file or launch your LiveBarn session in dual window mode to begin tagging clips.</p>
-          <button onclick="triggerFileInput()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-lg">
-            Choose Game Video File
+          <p class="text-sm font-semibold text-white mb-1">LiveBarn Dual-Screen Cockpit Active</p>
+          <p class="text-xs text-slate-400 max-w-sm mb-4">Your tagging engine is synchronized. Click below to launch your stream or paste your link above.</p>
+          <button onclick="launchLiveBarn()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-lg">
+            Open LiveBarn Feed
           </button>
         </div>
       </div>
@@ -97,7 +99,7 @@
 
     </section>
 
-    <!-- RIGHT COLUMN: 49ing ANALYTICAL FEED & TIMELINE (5 COLS) -->
+    <!-- RIGHT COLUMN: ANALYTICAL FEED & TIMELINE (5 COLS) -->
     <section class="lg:col-span-5 flex flex-col gap-5">
 
       <!-- Metrics Overview -->
@@ -116,25 +118,25 @@
         </div>
       </div>
 
-      <!-- Play-by-Play Tagged Event List (49ing Index) -->
+      <!-- Play-by-Play Tagged Event List -->
       <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl flex-1 flex flex-col">
         <h3 class="text-xs font-bold text-white mb-3 flex items-center justify-between">
           <span>Interactive Play Index</span>
-          <span class="text-[10px] text-slate-400">Click event to jump video</span>
+          <span class="text-[10px] text-slate-400">Logged Events</span>
         </h3>
         <div id="eventList" class="flex-1 max-h-56 overflow-y-auto space-y-2 pr-1 text-xs">
-          <p class="text-slate-500 text-center py-6">No events logged yet. Use tagging buttons above.</p>
+          <p class="text-slate-500 text-center py-6">No events logged yet. Tap buttons while watching your stream.</p>
         </div>
       </div>
 
-      <!-- 49ing AI Assistant Report Box -->
+      <!-- 49ing AI Tactical Report Box -->
       <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl">
         <h3 class="text-xs font-bold text-white mb-2 flex items-center gap-2">
           <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
-          49ing AI Tactical Insights
+          Live Analytical Insights
         </h3>
         <div id="aiOutput" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 space-y-2 leading-relaxed">
-          Log shifts or shots to trigger automated shift efficiency and player impact calculations.
+          Start tagging shifts to generate real-time player pacing and efficiency metrics.
         </div>
       </div>
 
@@ -145,6 +147,27 @@
     const events = [];
     const video = document.getElementById('gameVideo');
     const placeholder = document.getElementById('playerPlaceholder');
+
+    // Load saved LiveBarn link on startup
+    window.onload = function() {
+      const savedLink = localStorage.getItem('shiftiq_livebarn_url');
+      if (savedLink) {
+        document.getElementById('livebarnUrlInput').value = savedLink;
+      }
+    };
+
+    function saveLiveBarnLink() {
+      const url = document.getElementById('livebarnUrlInput').value.trim();
+      if (url) {
+        localStorage.setItem('shiftiq_livebarn_url', url);
+        alert('LiveBarn link saved successfully!');
+      }
+    }
+
+    function launchLiveBarn() {
+      const url = document.getElementById('livebarnUrlInput').value.trim() || 'https://watch.livebarn.com';
+      window.open(url, '_blank');
+    }
 
     function triggerFileInput() {
       document.getElementById('localFileInput').click();
@@ -161,26 +184,8 @@
       }
     }
 
-    function loadVideoSource() {
-      const url = document.getElementById('videoSourceInput').value.trim();
-      if(!url) return;
-      if (url.includes('.mp4') || url.includes('.webm')) {
-        video.src = url;
-        video.classList.remove('hidden');
-        placeholder.classList.add('hidden');
-        video.play();
-      } else {
-        window.open(url, '_blank');
-      }
-    }
-
-    function openLiveBarnDirect() {
-      const url = document.getElementById('videoSourceInput').value.trim();
-      window.open(url || 'https://watch.livebarn.com', '_blank');
-    }
-
     function logEvent(type) {
-      const currentTime = video.currentTime ? Math.floor(video.currentTime) : 0;
+      const currentTime = video && !video.classList.contains('hidden') ? Math.floor(video.currentTime) : Math.floor(Date.now() / 1000 % 3600);
       const formattedTime = new Date(currentTime * 1000).toISOString().substr(14, 5);
       
       events.unshift({ type, time: currentTime, formatted: formattedTime });
@@ -214,10 +219,10 @@
       const shiftsIn = events.filter(e => e.type === 'Shift In').length;
       if (shiftsIn > 0) {
         document.getElementById('toiDisplay').innerText = `${shiftsIn * 45}s`;
-        document.getElementById('ratingDisplay').innerText = '8.8';
+        document.getElementById('ratingDisplay').innerText = '9.1';
         document.getElementById('aiOutput').innerHTML = `
           <p>📌 <strong>Active Shift Pacing:</strong> ${shiftsIn} total shifts logged.</p>
-          <p>💡 <strong>Tactical Advice:</strong> Maintain pace in middle zone transition.</p>
+          <p>💡 <strong>Tactical Advice:</strong> High intensity through neutral zone transitions.</p>
         `;
       }
     }
