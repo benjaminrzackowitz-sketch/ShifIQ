@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShiftIQ - 49ing AI Data Cockpit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { dark: '#080d1a', card: '#0f172a', accent: '#00d2ff', emerald: '#10b981' }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#080d1a] text-slate-100 min-h-screen font-sans selection:bg-cyan-500 selection:text-black">
+
+  <!-- 49ing Cockpit Navigation Bar -->
+  <header class="border-b border-slate-800/80 bg-slate-900/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-cyan-500 text-slate-950 flex items-center justify-center font-black text-lg shadow-lg shadow-cyan-500/20">
+          49
+        </div>
+        <div>
+          <h1 class="font-bold text-base text-white flex items-center gap-2">
+            ShiftIQ <span class="text-[10px] px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30 font-mono">DATA COCKPIT</span>
+          </h1>
+          <p class="text-xs text-slate-400">Multimodal Hockey AI & Shift Tagging Engine</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="triggerFileInput()" class="bg-slate-800 hover:bg-slate-700 text-xs px-3 py-2 rounded-lg border border-slate-700 transition">
+          📁 Load MP4 File
+        </button>
+        <button onclick="openLiveBarnDirect()" class="bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs px-3.5 py-2 rounded-lg transition shadow-lg shadow-cyan-500/20">
+          ↗️ Open LiveBarn
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- LEFT COLUMN: VIDEO PLAYER & TAGGING TIMELINE (7 COLS) -->
+    <section class="lg:col-span-7 flex flex-col gap-5">
+      
+      <!-- Video Control & Source Bar -->
+      <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl">
+        <div class="flex flex-col sm:flex-row gap-2">
+          <input id="videoSourceInput" type="text" placeholder="Paste MP4 Video Link or LiveBarn URL..." 
+            class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 transition" />
+          <button onclick="loadVideoSource()" class="bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 text-xs font-bold px-4 py-2 rounded-xl transition">
+            Load Stream
+          </button>
+        </div>
+        <input type="file" id="localFileInput" accept="video/mp4,video/webm" class="hidden" onchange="handleFileSelect(event)" />
+      </div>
+
+      <!-- Main HTML5 Player Container -->
+      <div class="bg-slate-950 border border-slate-800/80 rounded-2xl overflow-hidden shadow-2xl aspect-video relative flex items-center justify-center">
+        <video id="gameVideo" class="w-full h-full object-contain hidden" controls></video>
+        <div id="playerPlaceholder" class="p-6 text-center">
+          <div class="w-14 h-14 mx-auto rounded-full bg-cyan-500/10 text-cyan-400 flex items-center justify-center mb-3">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          </div>
+          <p class="text-sm font-semibold text-white mb-1">49ing Interactive Player Ready</p>
+          <p class="text-xs text-slate-400 max-w-sm mb-4">Select an MP4 file or launch your LiveBarn session in dual window mode to begin tagging clips.</p>
+          <button onclick="triggerFileInput()" class="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 text-xs font-bold px-5 py-2.5 rounded-xl transition shadow-lg">
+            Choose Game Video File
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Event Tagging Controls -->
+      <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl">
+        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Instant Event Tagging Buttons</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+          <button onclick="logEvent('Shift In')" class="bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 font-semibold text-xs py-2.5 rounded-xl transition">
+            ⏱️ Shift In
+          </button>
+          <button onclick="logEvent('Shift Out')" class="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-400 font-semibold text-xs py-2.5 rounded-xl transition">
+            ⏹️ Shift Out
+          </button>
+          <button onclick="logEvent('Shot on Goal')" class="bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 font-semibold text-xs py-2.5 rounded-xl transition">
+            🏒 Shot
+          </button>
+          <button onclick="logEvent('Goal Scored')" class="bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-400 font-semibold text-xs py-2.5 rounded-xl transition">
+            🚨 Goal
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- RIGHT COLUMN: 49ing ANALYTICAL FEED & TIMELINE (5 COLS) -->
+    <section class="lg:col-span-5 flex flex-col gap-5">
+
+      <!-- Metrics Overview -->
+      <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl grid grid-cols-3 gap-2 text-center">
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 block mb-1">ESTIMATED TOI</span>
+          <span id="toiDisplay" class="text-lg font-bold text-cyan-400 font-mono">00:00</span>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 block mb-1">TOTAL SHOTS</span>
+          <span id="shotDisplay" class="text-lg font-bold text-white">0</span>
+        </div>
+        <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+          <span class="text-[10px] text-slate-400 block mb-1">SHIFT RATING</span>
+          <span id="ratingDisplay" class="text-lg font-bold text-emerald-400">--</span>
+        </div>
+      </div>
+
+      <!-- Play-by-Play Tagged Event List (49ing Index) -->
+      <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl flex-1 flex flex-col">
+        <h3 class="text-xs font-bold text-white mb-3 flex items-center justify-between">
+          <span>Interactive Play Index</span>
+          <span class="text-[10px] text-slate-400">Click event to jump video</span>
+        </h3>
+        <div id="eventList" class="flex-1 max-h-56 overflow-y-auto space-y-2 pr-1 text-xs">
+          <p class="text-slate-500 text-center py-6">No events logged yet. Use tagging buttons above.</p>
+        </div>
+      </div>
+
+      <!-- 49ing AI Assistant Report Box -->
+      <div class="bg-slate-900 border border-slate-800/80 rounded-2xl p-4 shadow-xl">
+        <h3 class="text-xs font-bold text-white mb-2 flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+          49ing AI Tactical Insights
+        </h3>
+        <div id="aiOutput" class="bg-slate-950 border border-slate-800 rounded-xl p-3 text-xs text-slate-300 space-y-2 leading-relaxed">
+          Log shifts or shots to trigger automated shift efficiency and player impact calculations.
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    const events = [];
+    const video = document.getElementById('gameVideo');
+    const placeholder = document.getElementById('playerPlaceholder');
+
+    function triggerFileInput() {
+      document.getElementById('localFileInput').click();
+    }
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const fileUrl = URL.createObjectURL(file);
+        video.src = fileUrl;
+        video.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        video.play();
+      }
+    }
+
+    function loadVideoSource() {
+      const url = document.getElementById('videoSourceInput').value.trim();
+      if(!url) return;
+      if (url.includes('.mp4') || url.includes('.webm')) {
+        video.src = url;
+        video.classList.remove('hidden');
+        placeholder.classList.add('hidden');
+        video.play();
+      } else {
+        window.open(url, '_blank');
+      }
+    }
+
+    function openLiveBarnDirect() {
+      const url = document.getElementById('videoSourceInput').value.trim();
+      window.open(url || 'https://watch.livebarn.com', '_blank');
+    }
+
+    function logEvent(type) {
+      const currentTime = video.currentTime ? Math.floor(video.currentTime) : 0;
+      const formattedTime = new Date(currentTime * 1000).toISOString().substr(14, 5);
+      
+      events.unshift({ type, time: currentTime, formatted: formattedTime });
+      renderEvents();
+      calculateStats();
+    }
+
+    function jumpToTime(seconds) {
+      if (!video.classList.contains('hidden')) {
+        video.currentTime = seconds;
+        video.play();
+      }
+    }
+
+    function renderEvents() {
+      const list = document.getElementById('eventList');
+      if (events.length === 0) return;
+      
+      list.innerHTML = events.map(e => `
+        <div onclick="jumpToTime(${e.time})" class="bg-slate-950 border border-slate-800/80 hover:border-cyan-500/50 p-2.5 rounded-xl flex items-center justify-between cursor-pointer transition">
+          <span class="font-semibold text-slate-200">${e.type}</span>
+          <span class="font-mono text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">${e.formatted}</span>
+        </div>
+      `).join('');
+    }
+
+    function calculateStats() {
+      const shots = events.filter(e => e.type === 'Shot on Goal' || e.type === 'Goal Scored').length;
+      document.getElementById('shotDisplay').innerText = shots;
+
+      const shiftsIn = events.filter(e => e.type === 'Shift In').length;
+      if (shiftsIn > 0) {
+        document.getElementById('toiDisplay').innerText = `${shiftsIn * 45}s`;
+        document.getElementById('ratingDisplay').innerText = '8.8';
+        document.getElementById('aiOutput').innerHTML = `
+          <p>📌 <strong>Active Shift Pacing:</strong> ${shiftsIn} total shifts logged.</p>
+          <p>💡 <strong>Tactical Advice:</strong> Maintain pace in middle zone transition.</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
